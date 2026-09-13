@@ -32,7 +32,7 @@ def run_task(task_text, api_key):
     category = classify_task(task_text)
     client = Groq(api_key=api_key)
     response = client.chat.completions.create(
-        model="llama-3.1-8b-instant",
+        model="openai/gpt-oss-20b",
         messages=[
             {"role": "system", "content": SYSTEM_PROMPTS[category]},
             {"role": "user", "content": task_text},
