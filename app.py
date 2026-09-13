@@ -28,24 +28,11 @@ def split_into_chunks(text, seconds_per_scene, words_per_second=2.2):
     return [c for c in chunks if c.strip()]
 
 def get_image_prompts(chunks, api_key):
-    client = Groq(api_key=api_key)
-    numbered = "\n".join([f"{i+1}. {c}" for i, c in enumerate(chunks)])
-    system = (
-        "For each numbered script segment below, write ONE short (max 20 words) anime-style visual "
-        "image description matching that segment's content. Reply with ONLY a valid JSON array of strings, "
-        "in the same order, no extra text. Example: [\"prompt for 1\", \"prompt for 2\"]"
-    )
-    response = client.chat.completions.create(
-        model="openai/gpt-oss-20b",
-        messages=[
-            {"role": "system", "content": system},
-            {"role": "user", "content": numbered},
-        ],
-        max_tokens=min(6000, len(chunks) * 40 + 300),
-    )
-    raw = response.choices[0].message.content.strip()
-    raw = raw.replace("```json", "").replace("```", "").strip()
-    return json.loads(raw)
+    prompts = []
+    for chunk in chunks:
+        words = chunk.split()
+        prompts.append(" ".join(words[:30]))
+    return prompts
 
 def download_image(prompt_text, save_path):
     encoded = urllib.parse.quote(prompt_text + ", anime style, high detail, cinematic")
