@@ -8,7 +8,7 @@ import json
 import tempfile
 from groq import Groq
 from gtts import gTTS
-from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips, CompositeVideoClip, TextClip
+from moviepy import ImageClip, AudioFileClip, concatenate_videoclips, CompositeVideoClip, TextClip
 
 st.set_page_config(page_title="AI Manager - @anyme", page_icon="🎬")
 
@@ -66,13 +66,14 @@ def build_video(chunks, image_prompts, workdir, progress_bar):
         audio_clip = AudioFileClip(audio_path)
         duration = audio_clip.duration
 
-        img_clip = ImageClip(img_path).set_duration(duration).resize(lambda t: 1 + 0.03 * t)
+        img_clip = ImageClip(img_path).with_duration(duration).resized(lambda t: 1 + 0.03 * t)
         caption = TextClip(
-            chunk_text, fontsize=28, color="white", font="Arial-Bold",
+            font="/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+            text=chunk_text, font_size=28, color="white",
             method="caption", size=(950, None), stroke_color="black", stroke_width=1.5
-        ).set_duration(duration).set_position(("center", "bottom"))
+        ).with_duration(duration).with_position(("center", "bottom"))
 
-        scene = CompositeVideoClip([img_clip, caption]).set_audio(audio_clip)
+        scene = CompositeVideoClip([img_clip, caption]).with_audio(audio_clip)
         clips.append(scene)
         progress_bar.progress((i + 1) / total, text=f"Scene {i+1}/{total} taiyar")
 
@@ -113,3 +114,4 @@ st.markdown("""
 3. Left menu se **API Keys** par jao → **Create API Key**
 4. Wo key copy karke upar wale box mein paste karo
 """)
+                      
