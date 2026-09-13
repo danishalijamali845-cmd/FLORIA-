@@ -41,7 +41,7 @@ def get_image_prompts(chunks, api_key):
             {"role": "system", "content": system},
             {"role": "user", "content": numbered},
         ],
-        max_tokens=8000,
+        max_tokens=min(6000, len(chunks) * 40 + 300),
     )
     raw = response.choices[0].message.content.strip()
     raw = raw.replace("```json", "").replace("```", "").strip()
@@ -114,4 +114,3 @@ st.markdown("""
 3. Left menu se **API Keys** par jao → **Create API Key**
 4. Wo key copy karke upar wale box mein paste karo
 """)
-                      
