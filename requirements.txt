@@ -1,2 +1,6 @@
 streamlit
 groq
+gTTS
+moviepy
+requests
+pillow
