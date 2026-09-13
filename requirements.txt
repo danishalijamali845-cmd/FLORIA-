@@ -1,6 +1,9 @@
 streamlit
 groq
 gTTS
-moviepy
+moviepy==1.0.3
 requests
-pillow
+pillow<10
+decorator<5
+imageio<2.32
+imageio-ffmpeg
